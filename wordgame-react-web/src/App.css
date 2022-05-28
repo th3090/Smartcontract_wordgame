@@ -1,0 +1,241 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.divTime
+{
+	color:red;
+	font-size:15px
+}
+
+.divTime2
+{
+	color:blue;
+	font-size:15px
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal button {
+  outline: none;
+  cursor: pointer;
+  border: 0;
+}
+.modal > section {
+  width: 90%;
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 0.3rem;
+  background-color: #fff;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-show 0.3s;
+  overflow: hidden;
+}
+.modal > section > header {
+  position: relative;
+  padding: 16px 64px 16px 16px;
+  background-color: #f1f1f1;
+  font-weight: 700;
+}
+.modal > section > header button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  font-size: 21px;
+  font-weight: 700;
+  text-align: center;
+  color: #999;
+  background-color: transparent;
+}
+.modal > section > main {
+  padding: 16px;
+  border-bottom: 1px solid #dee2e6;
+  border-top: 1px solid #dee2e6;
+}
+.modal > section > footer {
+  padding: 12px 16px;
+  text-align: right;
+}
+.modal > section > footer button {
+  padding: 6px 12px;
+  color: #fff;
+  background-color: #6c757d;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.modal.openModal {
+  display: flex;
+  align-items: center;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-bg-show 0.3s;
+}
+@keyframes modal-show {
+  from {
+    opacity: 0;
+    margin-top: -50px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+@keyframes modal-bg-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Incomms WS SJS 160111 */
+
+.cs_crossword a{text-decoration:none}
+.cs_crossword img{vertical-align:top}
+.cs_crossword .main_box{position:relative;margin: 19px 0 20px;border:1px solid #f0f0f0}
+
+/*메뉴 영역*/
+/* .cs_crossword .play_cnt{position:absolute;top:1px;right:1px} */
+.cs_crossword .play_cnt em{color:#1eb501}
+.cs_crossword .main_box .tab_lang{text-align:center;overflow:hidden;border-bottom:1px solid #f0f0f0;height:38px;background-color:#f9fafb}
+.cs_crossword .main_box .tab_lang ul{overflow:hidden;text-align:center}
+.cs_crossword .main_box .tab_lang li{display:inline-block;*display:inline;*zoom:1;margin:0 15px 0 14px}
+.cs_crossword .main_box .tab_lang li a{display:block;line-height:3.2rem;padding:4px 5px 0px;font-weight:bold;color:#666;font-size:1.3rem;border-bottom:2px solid transparent}
+.cs_crossword .main_box .tab_lang li.on a{border-color:#1eb501}
+.cs_crossword .main_box .tab_mode{position:relative;height:38px;z-index:200}
+.cs_crossword .main_box .tab_mode a{line-height:3.5rem;color:#858585;padding-top:3px}
+.cs_crossword .main_box .tab_mode .mode{padding-left:19px;display:inline-block;vertical-align: top;}
+.cs_crossword .main_box .tab_mode .tab_sub a{display:inline-block;float:left;color:#9f9f9f}
+.cs_crossword .main_box .tab_mode .tab_sub a + a{margin-left:4px}
+.cs_crossword .main_box .tab_mode ul{position:absolute;overflow:hidden;top:38px;left:-1px;border:1px solid #cbcbcb;width:111px;background-color:#fff;z-index:200;padding:3px 0 4px}
+.cs_crossword .main_box .tab_mode .tab_pop{display:none}
+.cs_crossword .main_box .tab_mode .tab_pop.on{display:block}
+.cs_crossword .main_box .tab_mode li a{padding:0 0 0 22px;color:#666;display:block;line-height:3.3rem;height:31px}
+.cs_crossword .main_box .tab_mode li.on a{color:#1eb501} 
+.cs_crossword .main_box .tab_mode li a:hover{text-decoration:underline}
+.cs_crossword .main_box .tab_mode a .ico_arw{display:inline-block;*display:inline;*zoom:1;width:10px;height:10px;background:url(./sp_cross_v2.png) no-repeat -1170px -45px}
+.cs_crossword .main_box .tab_sub{position:absolute;top:0;right:18px}
+.cs_crossword .main_box .tab_sub a{position:relative}
+.cs_crossword .main_box .tab_sub a:hover em{color:#9f9f9f;text-decoration:underline}
+.cs_crossword .main_box .tab_sub a em{float:left}
+.cs_crossword .main_box .tab_sub .ico_new{width:15px;height:15px;display:block;float:left;margin:9px 4px 0 12px;background:url(./sp_cross_v2.png) no-repeat -1136px -9px}
+.cs_crossword .main_box .tab_sub .ico_replay{width:15px;height:15px;display:block;float:left;margin:9px 4px 0 12px;background:url(./sp_cross_v2.png) no-repeat -1168px -9px}
+
+ /*퀴즈 영역*/
+.cs_crossword .main_box .quiz_area{position:absolute;height:398px;border-top:1px solid #dde1e4}
+.cs_crossword .main_box .quiz_area .puz{position:relative;width:359px;float:left;height:398px;border-right:1px solid #e0e3e6}
+.cs_crossword .main_box .quiz_area .puz .cell{position:absolute;border:1px solid #e0e3e6;text-align:center;background-color:#fff}
+.cs_crossword .main_box .quiz_area .puz .cell .num{position:absolute;top:-1px;left:-1px;border:2px solid transparent;z-index:100}
+.cs_crossword .main_box .quiz_area .puz .cell .num em{position:absolute;top:5px;left:5px;font-weight:bold;color:#628de6}
+.cs_crossword .quiz_area .puz .cell.on2 .num em, .cs_crossword .quiz_area .puz .cell.on3 .num em, .cs_crossword .quiz_area .puz .cell.on3 .num em, .cs_crossword .quiz_area .puz .cell.on4 .num em, .cs_crossword .quiz_area .puz .cell.on5 .num em, .cs_crossword .quiz_area .puz .cell.on6 .num em, .cs_crossword .quiz_area .puz .cell.on7 .num em, .cs_crossword .quiz_area .puz .cell.on8 .num em, .cs_crossword .quiz_area .puz .cell.on9 .num em, .cs_crossword .quiz_area .puz .cell.on10 .num em{color:#ddd}
+.cs_crossword .main_box .quiz_area .puz .cell.a_false input{color:#ff4824}
+
+/*5x5*/
+.cs_crossword .main_box .quiz_area .puz.q_5x5{background:url(./sp_cross_v2.png) no-repeat 0px 0px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell{width:71px;height:71px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell input{position:absolute;top:2px;left:1px;background-color:transparent;border:none;width:69px;height:29px;line-height:normal;text-align:center;font-size:2.5rem;outline-style:none;padding:.83em 0 0.7em;border-radius:0;-webkit-appearance:none;-moz-appearance:none;appearance:none;z-index:150;vertical-align:middle}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.x1{left:-1px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.x2{left:71px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.x3{left:143px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.x4{left:215px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.x5{left:287px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.y1{top:-1px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.y2{top:71px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.y3{top:143px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.y4{top:215px}
+.cs_crossword .main_box .quiz_area .puz.q_5x5 .cell.y5{top:287px}
+.cs_crossword .quiz_area .puz.q_5x5 .cell.on{z-index:100}
+.cs_crossword .quiz_area .puz.q_5x5 .cell.on .num{border-color:#628de6;width:69px;height:69px}
+.cs_crossword .puz.q_5x5 .cell.on .num.hrz.c_1{width:69px}
+.cs_crossword .puz.q_5x5 .cell.on .num.hrz.c_2{width:141px}
+.cs_crossword .puz.q_5x5 .cell.on .num.hrz.c_3{width:213px}
+.cs_crossword .puz.q_5x5 .cell.on .num.hrz.c_4{width:285px}
+.cs_crossword .puz.q_5x5 .cell.on .num.hrz.c_5{width:357px}
+.cs_crossword .puz.q_5x5 .cell.on .num.vrt.c_1{height:69px} 
+.cs_crossword .puz.q_5x5 .cell.on .num.vrt.c_2{height:141px}
+.cs_crossword .puz.q_5x5 .cell.on .num.vrt.c_3{height:213px}
+.cs_crossword .puz.q_5x5 .cell.on .num.vrt.c_4{height:285px}
+.cs_crossword .puz.q_5x5 .cell.on .num.vrt.c_5{height:357px}
+
+
+/*문제 영역*/
+.cs_crossword .main_box .quiz_area .qtn{width:240px;float:right;height:384px;overflow:auto;padding:14px 14px 0 0}
+.cs_crossword .main_box .quiz_area .qtn li.on{color:#628de6}
+.cs_crossword .main_box .quiz_area .qtn li .qtn_chk{display:none;padding-top:2px}
+.cs_crossword .main_box .quiz_area .qtn li.on .qtn_chk{display:block}
+.cs_crossword .main_box .quiz_area .qtn li.on .qtn_chk a{color:#808080;text-decoration:underline}
+.cs_crossword .main_box .quiz_area .qtn li.on .qtn_chk .qtn_anw{display:none}
+.cs_crossword .main_box .quiz_area .qtn li.on .qtn_chk .qtn_anw.on{display:inline;color:#808080}
+.cs_crossword .main_box .quiz_area .qtn li.on .qtn_chk .qtn_anw.on em{color:#1eb501}
+.cs_crossword .main_box .quiz_area .qtn li{padding:7px 0 10px;line-height:1.9rem;color:#666}
+.cs_crossword .main_box .quiz_area .qtn li+li{padding-top:10px}
+.cs_crossword .main_box .quiz_area .qtn .qtn_hrz li{border-bottom:1px solid #e9ebed}
+.cs_crossword .main_box .quiz_area .qtn .qtn_vrt{padding-top:12px}
+.cs_crossword .main_box .quiz_area .qtn .qtn_vrt li{padding-top:9px}
+.cs_crossword .main_box .quiz_area .qtn .qtn_vrt li + li{border-top:1px solid #e9ebed;padding-top:10px}
+
+
+
+/*하단 영역*/
+.cs_crossword .main_box .quiz_area .like_area{position:absolute;bottom:0;left:0;width:359px;height:38px;display:block;border-top:1px solid #e0e3e6}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn{padding:1px 0 3px 20px;overflow:hidden;float:left}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn a{display:block;color:#666;padding-top:12px;float:left;height:21px;margin-right:15px}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn a span{float:left}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn a span + span{padding-left:2px}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn .csw_lke{float:left}
+.cs_crossword .main_box .quiz_area .like_area .puz_btn .csw_lke .u_cnt{vertical-align:top;margin-left:3px;padding-top:1px}
+
+.cs_crossword .main_box .quiz_area .like_area .puz_btn a.btn_snd{display:block;overflow:hidden;float:left;width:15px;height:26px;padding:5px 0;text-indent:-99999px;background:url(./sp_cross_v2.png) no-repeat -1201px 2px}
+.cs_crossword .main_box .quiz_area .like_area .mark{display:block;color:#9f9f9f;float:right;line-height:4.0rem;height:40px;padding-right:19px}
+.cs_crossword .main_box .quiz_area .like_area .mark:hover{text-decoration:underline}
+
+
+
+/*안내 문구*/
+.cs_crossword .puz_info{margin: 0 0 18px;color:#808080;font-size:1.2rem;padding:0 0 2px 19px;background:url(./sp_cross_v2.png) no-repeat 0 -648px;line-height:1.2rem;}
+
+
