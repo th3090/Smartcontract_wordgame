@@ -7,9 +7,11 @@ import Web3 from 'web3';
 
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
-import Game from './Game'; 
+import Game from './Game';
+import GameAnswer from './GameAnswer.js' 
 import Main from './Main';
-import Test from './Test';  
+import Test from './Test';
+import Test2 from './Test2';   
 
 const App = () => { 
   return ( 
@@ -18,7 +20,10 @@ const App = () => {
   <Routes> 
     <Route path="/" element={<Main />}></Route>
     <Route path="/game" element={<Game />}></Route> 
+    <Route path="/gameanswer" element={<GameAnswer />}></Route>
     <Route path="/test" element={<Test />}></Route> 
+    <Route path="/test2" element={<Test2 />}></Route> 
+
   </Routes> 
   </BrowserRouter> </div> 
     ); 

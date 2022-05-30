@@ -1,31 +1,11 @@
 import React from 'react'; 
 import { Link } from 'react-router-dom'; 
 import  { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Test from './Test'
 
 
 const Main = (props) => { 
-    const [minutes, setMinutes] = useState(2);
-    const [seconds, setSeconds] = useState(0);
-
-    
-    useEffect(() => {
-        const countdown = setInterval(() => {
-        if (parseInt(seconds) > 0) {
-            setSeconds(parseInt(seconds) - 1);
-        }
-        if (parseInt(seconds) === 0) {
-            if (parseInt(minutes) === 0) {
-            clearInterval(countdown);
-            } else {
-            setMinutes(parseInt(minutes) - 1);
-            setSeconds(59);
-            }
-        }
-        }, 1000);
-        return () => clearInterval(countdown);
-    }, [minutes, seconds]);
-
     //const history = useHistory();
 
     return ( 
@@ -35,33 +15,17 @@ const Main = (props) => {
             <h2>Current Pot</h2>
             <div className="divTime">
       <h3>종료시간!</h3>
-      <div>
-        <h3>
-          {minutes}:{seconds}
-        </h3>
-      </div>
+      <Test></Test>
+      
     </div>
     </div>
 
     <div className='container'>
         <ul> <Link to=
         {{  pathname : "/game",
-            state : {minute : minutes,
-                    second : seconds,
-                    },
+           
         }}>
         <button className='btn btn-danger btn-lg'>Bet and Game!</button>
-        </Link></ul>
-    </div>
-
-    <div className='container'>
-        <ul> <Link to=
-        {{  pathname : "/test",
-            state : {minute : minutes,
-                    second : seconds,
-                    },
-        }}>
-        <button className='btn btn-danger btn-lg'>Test</button>
         </Link></ul>
     </div>
 

@@ -1,68 +1,40 @@
-import React, { useState, useRef } from 'react';
+import React,{useState}  from 'react';
+import moment from 'moment';
+import Moment from 'react-moment';
+import 'moment/locale/ko';
+import { Link,useNavigate,Navigate } from 'react-router-dom'; 
+import { useInterval } from 'react-use';
+import {Routes, Route} from 'react-router-dom'; 
 
-import './App.css';
 
 const Test = () => {
-  const [timer, setTimer] = useState(3595)
-  const [isActive, setIsActive] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const increment = useRef(null)
+  const [seconds, setSeconds] = useState(Date.now());
+  const [delay, setDelay] = useState(1000);
+  const [isrunning,setIsRunning] = useState(true);
 
-  const handleStart = () => {
-    setIsActive(true)
-    setIsPaused(true)
-    increment.current = setInterval(() => {
-      setTimer((timer) => timer + 1)
-    }, 1000)
-  }
 
-  const handlePause = () => {
-    clearInterval(increment.current)
-    setIsPaused(false)
-  }
+  // useInterval
+  useInterval(() => {
+    setSeconds(Date.now());
+  }, 1000 );
 
-  const handleResume = () => {
-    setIsPaused(true)
-    increment.current = setInterval(() => {
-      setTimer((timer) => timer + 1)
-    }, 1000)
-  }
-
-  const handleReset = () => {
-    clearInterval(increment.current)
-    setIsActive(false)
-    setIsPaused(false)
-    setTimer(0)
-  }
-
-  const formatTime = () => {
-    const getSeconds = `0${(timer % 60)}`.slice(-2)
-    const minutes = `${Math.floor(timer / 60)}`
-    const getMinutes = `0${minutes % 60}`.slice(-2)
-    const getHours = `0${Math.floor(timer / 3600)}`.slice(-2)
-
-    return `${getHours} : ${getMinutes} : ${getSeconds}`
-  }
+  const startTime = new Date('2022-05-30T22:00'),
+        nowTimeFormat = new Date(seconds);
 
   return (
-    <div className="app">
-      <h3>React Stopwatch</h3>
-      <div className='stopwatch-card'>
-        <p>{formatTime()}</p>
-        <div className='buttons'>
-          {
-            !isActive && !isPaused ?
-              <button onClick={handleStart}>Start</button>
-              : (
-                isPaused ? <button onClick={handlePause}>Pause</button> :
-                  <button onClick={handleResume}>Resume</button>
-              )
-          }
-          <button onClick={handleReset} disabled={!isActive}>Reset</button>
-        </div>
-      </div>
-    </div>
-  );
+    <>
+    {startTime - nowTimeFormat > 0 ? 
+     (<><Moment fromNow>{startTime}</Moment>&nbsp;게임 종료</>) : 
+     (
+      <div className='container'>
+        <ul> <Link to=
+        {{  pathname : "/gameanswer",
+        }}>
+        <button className='btn btn-danger btn-lg'>정답보기</button>
+        </Link></ul>
+      </div>)
+    }  
+    </>
+  )
 }
-
 export default Test;

@@ -1,10 +1,10 @@
 
 import React,{Component} from "react";
 import  { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "./App.css";
-import Modal from './Modal';
-
+import Modal1 from './Modal';
+import Test2 from './Test2'
 
 //export default function Game({location}) {
 export default function Game(props) {
@@ -66,17 +66,11 @@ export default function Game(props) {
     setModalOpen(false);
   };
 
-  
-
-
   return (
   <div>
-   <div className="divTime1">
+   <div className="divTime">
       <h1>종료!</h1>
-      <div>
-         <h2>
-         </h2>
-      </div>
+      <Test2></Test2>
    </div>
    <div className="divTime2">
       <h1>시작!</h1>
@@ -154,9 +148,9 @@ export default function Game(props) {
                     <div class="puz_btn">
                     <React.Fragment>
                       <button type="button" class="btn btn-secondary" onClick={openModal}>제출하기</button>
-                      <Modal open={modalOpen} close={closeModal} header="제출 결과">
-                        정답 맞춘 개수 / 게임 시간  {minutes}:{seconds}/ {word1} / {word2} / {word3} / {word4} / {word5} / {word6} / {arr}
-                      </Modal>
+                      <Modal1 open={modalOpen} close={closeModal} header="제출 결과">
+                        정답 맞춘 개수/ {word1} / {word2} / {word3} / {word4} / {word5} / {word6} / {arr}
+                      </Modal1>
                     </React.Fragment>
                     </div>
                   </div>

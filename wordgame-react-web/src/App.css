@@ -37,6 +37,10 @@
   }
 }
 
+.GameAnswer{
+  margin-top: 400px;
+}
+
 .divTime
 {
 	color:red;
@@ -166,7 +170,7 @@
 .cs_crossword .main_box .tab_sub .ico_replay{width:15px;height:15px;display:block;float:left;margin:9px 4px 0 12px;background:url(./sp_cross_v2.png) no-repeat -1168px -9px}
 
  /*퀴즈 영역*/
-.cs_crossword .main_box .quiz_area{position:absolute;height:398px;border-top:1px solid #dde1e4}
+.cs_crossword .main_box .quiz_area{position:absolute;margin-left:300px;height:398px;border-top:1px solid #dde1e4}
 .cs_crossword .main_box .quiz_area .puz{position:relative;width:359px;float:left;height:398px;border-right:1px solid #e0e3e6}
 .cs_crossword .main_box .quiz_area .puz .cell{position:absolute;border:1px solid #e0e3e6;text-align:center;background-color:#fff}
 .cs_crossword .main_box .quiz_area .puz .cell .num{position:absolute;top:-1px;left:-1px;border:2px solid transparent;z-index:100}

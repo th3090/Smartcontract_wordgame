@@ -1,5 +1,6 @@
 import React from 'react';
 import "./App.css";
+import { Link } from 'react-router-dom'; 
 
 const Modal = (props) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -18,9 +19,11 @@ const Modal = (props) => {
           </header>
           <main>{props.children}</main>
           <footer>
+            <ul><Link to = {{ pathname : "/",}}>
             <button className="close" onClick={close}>
               close
             </button>
+            </Link></ul>
           </footer>
         </section>
       ) : null}
