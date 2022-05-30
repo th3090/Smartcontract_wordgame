@@ -14,7 +14,7 @@ contract('Wordgame', function([deployer, user1, user2, user3, user4, user5, user
     // let timeLimit = 3600; // 계속 쓰게 될 변수 선언 (2-4)
     // let feeAmountBN = new web3.utils.BN('5000000000000000');
 
-    let answerList = ['사과','과일','일정']
+    // let answerList = ['사과','과일','일정']
     let answerWords = '사과과일일정'
 
     beforeEach(async () => {               // Test 수행 전에 실행되는 것들 , async로 Promise 객체 사용
@@ -201,7 +201,7 @@ contract('Wordgame', function([deployer, user1, user2, user3, user4, user5, user
 
         })
         // 최종 1위 확인
-        it.only("winner check", async () => {
+        it("winner check", async () => {
             let user1SummitAnswerList = await ['사과','과일','일정']
             let user1SummitWords = await '사과과일일정'
             let user2SummitAnswerList = await ['사고','과일','일정']
@@ -241,5 +241,27 @@ contract('Wordgame', function([deployer, user1, user2, user3, user4, user5, user
             console.log(events) // 없는 변수로 로그 찍으면 이때 까지의 이벤트 로그 찍혀나옴
             
         })
-    }) 
+    })
+    describe("Set answerlist & game status", function () {
+        // it.only("Check answerList", async () => {
+        //     let testAnswerList = ["사과","과일","일상"]
+
+        //     let user2SummitAnswerList = await ['사고','과일','일정']
+        //     let user2SummitWords = await '사고과일일정'
+
+        //     let answerList = await wordgame.setAnswer(testAnswerList)
+
+        //     await wordgame.participation({from : user2, value: feeAmount}) // 3개
+        //     await wordgame.summit(user2SummitWords, answerWords, user2SummitAnswerList, answerList, {from : user1})
+
+        //     console.log(events)
+        // })
+        it.only("Check set answerList", async () => {
+            let test = await ["사과","과일","일상"]
+            let answerList = await wordgame.setAnswer(test)
+            let abc = await wordgame.getGameInfo(1)
+            console.log(abc)
+            // console.log(owner)
+        })
+    })
 })

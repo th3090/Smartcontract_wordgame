@@ -16,13 +16,25 @@ contract Wordgame {
         string[] answer_list;
         }
 
+    struct GameStatusInfo {
+        uint256 gameRound;       // 게임 라운드를 저장할 변수
+        string[] answerList;   // 정답을 저장할 변수
+    }
+
+    bool private _gameStatusFlag; // 게임 on/off를 담당할 플래그
+
+    uint256 private _gameTail = 1; // GameStatusInfo 저장을 위한 queue의 tail
+    uint256 private _gameHead = 1; // GameStautsINfo 저장을 위한 queue의 head
+
     /*  참가자 정보를 저장할 큐 관련 변수 */
     uint256 private _tail; // ParticipantInfo 저장을 위한 queue의 tail
     uint256 private _head; // ParticipantInfo 저장을 위한 queue의 head
 
+    // pot 정보를 저장할 변수
     uint256 private _pot; 
 
     mapping (uint256 => ParticipantInfo) private _participants; // mapping (_KeyType => _ValueType)
+    mapping (uint256 => GameStatusInfo) private _gamestatus;    
     
     // TODO : 이거 뭐였지?
     address payable public owner; // public으로 주소를 만들게 되면 자동으로 getter를 만듦
@@ -35,7 +47,8 @@ contract Wordgame {
 
     event PARTICIPATION(uint256 index, address participant, uint256 fee, uint256 participationTime);
     event SUMMIT(uint256 index, address participant, uint256 answerCount, uint256 playtime);
-    event DISTRIBUTE(address winner, uint256 pot);
+    event DISTRIBUTE(uint256 index, address winner, uint256 pot);
+    event START(uint256 index, address sender, string[] trueAnswerList);
 //     event DRAW(uint256 index, address bettor, uint256 amount, bytes1 challenges, bytes1 answer, uint256 answerBlockNumber);
 //     event REFUND(uint256 index, address bettor, uint256 amount, bytes1 challenges, uint256 answerBlockNumber);
 
@@ -198,17 +211,21 @@ contract Wordgame {
 
     // distribute function -> 1등에게 쌓인 pot money 전달
     function distribute() public {
-        // require msg.sender == owner 필요한거 같음
+        require(msg.sender == owner);
         // 1등 찾기
         address payable winner = _popAndSearchWinner();
+        uint256 index = _gameTail;
 
         // 이벤트
-        emit DISTRIBUTE(winner, _pot);
+        emit DISTRIBUTE(index, winner, _pot);
 
         // 이더 전송
         transferAfterPayingFee(winner, _pot);
         _pot = 0;
-        emit DISTRIBUTE(winner, _pot);
+
+        _gameStatusFlag = false;
+
+        emit DISTRIBUTE(index, winner, _pot);
 
     }
 
@@ -236,4 +253,45 @@ contract Wordgame {
         _tail = 0;
         return winner;
     }
+
+    // ------
+
+    // function gameStart() {
+
+    // }
+
+    // function gameEnd() {
+
+    // }
+
+
+    function _pushAnswerInfo(string[] memory trueAnswerList) private returns (bool) {
+        GameStatusInfo memory g;
+        g.gameRound == _gameTail;
+        g.answerList = trueAnswerList;
+
+        _gamestatus[_gameTail] = g;
+
+        return true;
+    }
+
+    function startGame(string[] memory trueAnswerList) public returns (bool) {
+        require(msg.sender == owner);
+
+        require(_pushAnswerInfo(trueAnswerList), 'Fail to add new game Info');
+
+        uint256 index = _gameTail;
+        _gameStatusFlag = true;
+
+        emit START(index, msg.sender, trueAnswerList);
+
+        return true;
+    }
+
+    function getGameInfo(uint256 index) public view returns (uint256 gameRound, string[] memory trueAnswerList) {
+        GameStatusInfo memory g = _gamestatus[index];
+        gameRound = g.gameRound;
+        trueAnswerList = g.answerList;
+    }
+
 }
