@@ -19,6 +19,7 @@ contract Wordgame {
     struct GameStatusInfo {
         uint256 gameRound;       // 게임 라운드를 저장할 변수
         string[] answerList;   // 정답을 저장할 변수
+        string answerWords;    // 정답 합친거
     }
 
     bool private _gameStatusFlag; // 게임 on/off를 담당할 플래그
@@ -45,10 +46,11 @@ contract Wordgame {
     uint256 constant internal SUMMIT_FEE_AMOUNT = 2 * 10 **15; // 0.002 ether
 
 
-    event PARTICIPATION(uint256 index, address participant, uint256 fee, uint256 participationTime);
-    event SUMMIT(uint256 index, address participant, uint256 answerCount, uint256 playtime);
-    event DISTRIBUTE(uint256 index, address winner, uint256 pot);
-    event START(uint256 index, address sender, string[] trueAnswerList);
+    event PARTICIPATION(uint256 round_index, uint256 participant_index, address participant, uint256 fee, uint256 participationTime);
+    event SUMMIT(uint256 round_index, uint256 participant_index, address participant, uint256 answerCount, uint256 playtime);
+    event DISTRIBUTE(uint256 round_index, address winner, uint256 pot);
+    event START(uint256 round_index, address sender, string[] trueAnswerList);
+    event END(uint256 round_index, address winner, uint256 pot, uint256 next_round);
 //     event DRAW(uint256 index, address bettor, uint256 amount, bytes1 challenges, bytes1 answer, uint256 answerBlockNumber);
 //     event REFUND(uint256 index, address bettor, uint256 amount, bytes1 challenges, uint256 answerBlockNumber);
 
@@ -62,9 +64,11 @@ contract Wordgame {
         require(pushParticipantInfo(), "Fail to add a new Participant Info");
 
         _pot += PARTICIPATION_FEE_AMOUNT;
+        uint256 round_index = _gameTail;
+
 
         // emit event
-        emit PARTICIPATION(_tail-1, msg.sender, msg.value, now);
+        emit PARTICIPATION(round_index, _tail-1, msg.sender, msg.value, now);
 
         return true;
     }
@@ -102,66 +106,51 @@ contract Wordgame {
         answerCount = p.answerCount;
     }
 
-    /*
-    정답 확인 로직
-    1. 전체 정답 확인 -> 확인은 keccak256 hash 값으로 -> 정답 맞을 시에 바로 결과
-    2. 전체 정답이 맞지 않을 경우 -> 각 단어에 대한 정답을 확인
-    3. 각 단어에 대한 정답도 keccak256 hash 값으로 확인
-    */
-
 
     // 단일 단어 해시 함수
     function _wordHash(string memory word) internal pure returns (bytes32) {
         bytes32 wordhash = keccak256(abi.encodePacked(word));
         return wordhash;
     }
-    
-    // 여러 단어 리스트 해시 함수 -> Test로 되는 것은 확인 함 -> 필요 없음
-    function wordListHash(string memory word1, string memory word2, string memory word3) public pure returns (bytes32) {
-        bytes32 wordlisthash = keccak256(abi.encodePacked(word1, word2, word3));
-        return wordlisthash;
-    }
 
-    // 합쳐진 단어 비교
-    function _checkConcatWord(string memory summitWords, string memory answerWords) private view returns (bool) {
-        if (keccak256(abi.encodePacked(summitWords)) == keccak256(abi.encodePacked(answerWords)))
+
+    function _checkConcatWord(string memory summitWords) private view returns (bool) {
+        GameStatusInfo memory g  = _gamestatus[_gameTail];
+        if (keccak256(abi.encodePacked(summitWords)) == keccak256(abi.encodePacked(g.answerWords)))
     return true;
     }
 
-    // 각 단어 비교
-    function _checkWord(string[] memory summitAnswerList, string[] memory answerList) private view returns (uint256) {
+    function _checkWord(string[] memory summitAnswerList) private view returns (uint256) {
+        GameStatusInfo memory g  = _gamestatus[_gameTail];
         uint256 _count = 0;
-        for(uint i=0; i<answerList.length; i++) {
-            if(_wordHash(summitAnswerList[i]) == _wordHash(answerList[i])) {
+        for(uint i=0; i<g.answerList.length; i++) {
+            if(_wordHash(summitAnswerList[i]) == _wordHash(g.answerList[i])) {
                 _count++;
             }
         }
         return _count;
     }
 
-    // 정답 비교 로직 <- Summit 안에서 실행 될 예정 => summit 함수 생성 후에는 private 전환
-    function checkAnswerCount(string memory summitWords, string memory answerWords, string[] memory summitAnswerList, string[] memory answerList) public view returns (uint256) {
+
+    function _checkAnswerCount(string memory summitWords, string[] memory summitAnswerList) private view returns (uint256) {
+        GameStatusInfo memory g  = _gamestatus[_gameTail];
+
         uint256 _count = 0;
-        if(_checkConcatWord(summitWords, answerWords) == true) {
-            _count = answerList.length;
+        if(_checkConcatWord(summitWords) == true) {
+            _count = g.answerList.length;
         }
         else {
-            _count = _checkWord(summitAnswerList, answerList);
+            _count = _checkWord(summitAnswerList);
         }   
 
         return _count;
     }
-    // 나중에 보안을 위해서는 원래 정답은 처음부터 hash된 상태로 제공?
 
-    /* 제출 로직
-    1. _pushSummitInfo()를 통해 게임 결과에 대한 정보를 저장
-    2. 게임 결과 정보 저장을 위해 기존에 participation 정보가 저장되어 있는 큐에서 msg.sender의 인덱스 찾기
-        _searchIndex()
-    3. summit안에서 위의 함수 호출
-    */
-    function summit(string memory summitWords, string memory answerWords, string[] memory summitAnswerList, string[] memory answerList) public returns (bool result) {
+
+    function summit(string memory summitWords, string[] memory summitAnswerList) public returns (bool result) {
         // Push summit info to the queue
-        require(_pushSummitInfo(summitWords, answerWords, summitAnswerList, answerList), "Fail to add a new Summit Info");
+        require(_gameStatusFlag == true, "Time over");
+        require(_pushSummitInfo(summitWords, summitAnswerList), "Fail to add a new Summit Info");
 
         return true;
     }
@@ -179,8 +168,10 @@ contract Wordgame {
     }
 
     // save the summit info to the participants queue
-    function _pushSummitInfo(string memory summitWords, string memory answerWords, string[] memory summitAnswerList, string[] memory answerList) internal returns (bool) {   // ParticipantInfo에 summit info 저장
+    function _pushSummitInfo(string memory summitWords, string[] memory summitAnswerList) internal returns (bool) {   // ParticipantInfo에 summit info 저장
         uint256 index = 0;
+        uint256 round_index = _gameTail;
+
 
         index = _searchIndex();
         ParticipantInfo memory p = _participants[index];
@@ -188,11 +179,11 @@ contract Wordgame {
         p.summitTime = now;
         p.playTime = p.summitTime - p.participationTime;
         p.answer_list = summitAnswerList;
-        p.answerCount = checkAnswerCount(summitWords, answerWords, summitAnswerList, answerList);
+        p.answerCount = _checkAnswerCount(summitWords, summitAnswerList);
         _participants[index] = p;
 
         // emit event
-        emit SUMMIT(index, msg.sender, p.answerCount, p.playTime);
+        emit SUMMIT(round_index, index, msg.sender, p.answerCount, p.playTime);
 
         return true;
     }
@@ -223,10 +214,10 @@ contract Wordgame {
         transferAfterPayingFee(winner, _pot);
         _pot = 0;
 
-        _gameStatusFlag = false;
+        _gameStatusFlag = false; // 게임 종료 기능
+        _gameTail++;
 
-        emit DISTRIBUTE(index, winner, _pot);
-
+        emit END(index, winner, _pot, index+1);
     }
 
     function _popBet(uint256 index) internal returns (bool) {
@@ -254,20 +245,11 @@ contract Wordgame {
         return winner;
     }
 
-    // ------
 
-    // function gameStart() {
-
-    // }
-
-    // function gameEnd() {
-
-    // }
-
-
-    function _pushAnswerInfo(string[] memory trueAnswerList) private returns (bool) {
+    function _pushAnswerInfo(string memory trueAnswerWords, string[] memory trueAnswerList) private returns (bool) {
         GameStatusInfo memory g;
         g.gameRound == _gameTail;
+        g.answerWords = trueAnswerWords;
         g.answerList = trueAnswerList;
 
         _gamestatus[_gameTail] = g;
@@ -275,10 +257,10 @@ contract Wordgame {
         return true;
     }
 
-    function startGame(string[] memory trueAnswerList) public returns (bool) {
+    function startGame(string memory trueAnswerWords, string[] memory trueAnswerList) public returns (bool) {
         require(msg.sender == owner);
 
-        require(_pushAnswerInfo(trueAnswerList), 'Fail to add new game Info');
+        require(_pushAnswerInfo(trueAnswerWords, trueAnswerList), 'Fail to add new game Info');
 
         uint256 index = _gameTail;
         _gameStatusFlag = true;

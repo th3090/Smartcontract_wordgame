@@ -256,12 +256,55 @@ contract('Wordgame', function([deployer, user1, user2, user3, user4, user5, user
 
         //     console.log(events)
         // })
-        it.only("Check set answerList", async () => {
+        it("Check set answerList", async () => {
             let test = await ["사과","과일","일상"]
             let answerList = await wordgame.setAnswer(test)
             let abc = await wordgame.getGameInfo(1)
             console.log(abc)
             // console.log(owner)
+        })
+        it.only("Final test", async () => {
+            let trueAnswerList = await ["사과","과일","일정","정상수"]
+            let trueAnswerWords = await "사과과일일정정상수"
+
+            await wordgame.startGame(trueAnswerWords, trueAnswerList)
+
+            let user1SummitAnswerList = await ['사과','과일','일정','정상수']
+            let user1SummitWords = await '사과과일일정정상수'
+            let user2SummitAnswerList = await ['사과','과일','일정','정생수']
+            let user2SummitWords = await '사과과일일정정생수'
+            let user3SummitAnswerList = await ['사과','과일','일장','정생수']
+            let user3SummitWords = await '사과과일일장정생수'
+            let user4SummitAnswerList = await ['사고','과랄','일장','정생수']
+            let user4SummitWords = await '사고과랄일장정생수'
+
+            await wordgame.participation({from : user1, value: feeAmount}) // 4개
+            await sleep(4000)
+            await wordgame.summit(user1SummitWords, user1SummitAnswerList, {from : user1})
+
+            await wordgame.participation({from : user2, value: feeAmount}) // 3개
+            await sleep(1000)
+            await wordgame.summit(user2SummitWords, user2SummitAnswerList, {from : user2})
+
+            await wordgame.participation({from : user3, value: feeAmount}) // 2개
+            await sleep(500)
+            await wordgame.summit(user3SummitWords, user3SummitAnswerList, {from : user3})
+
+            await wordgame.participation({from : user4, value: feeAmount}) // 0개
+            await sleep(100)
+            await wordgame.summit(user4SummitWords, user4SummitAnswerList, {from : user4})
+
+            await wordgame.participation({from : user5, value: feeAmount}) // 4개
+            await sleep(2000)
+            await wordgame.summit(user1SummitWords, user1SummitAnswerList, {from : user5})
+
+            await wordgame.participation({from : user6, value: feeAmount}) // 4개
+            await sleep(4000)
+            await wordgame.summit(user1SummitWords, user1SummitAnswerList, {from : user6})
+
+            await wordgame.distribute()
+
+            console.log(abc)
         })
     })
 })
