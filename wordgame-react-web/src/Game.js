@@ -1,12 +1,14 @@
-
 import React,{Component} from "react";
 import  { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import "./App.css";
 import Modal1 from './Modal';
-import Test2 from './Test2'
+import Test2 from './Test2';
+import Web3 from 'web3';
 
-//export default function Game({location}) {
+let wordstring; 
+var arr;
+
 export default function Game(props) {
 
   let [inputvalue1,setInputValue1] = useState("");
@@ -28,16 +30,17 @@ export default function Game(props) {
   let word5 = inputvalue7 + inputvalue8; // 핑크
   let word6 = inputvalue10 + inputvalue11; // 병세
 
-  var arr = new Array(word1, word2, word3, word4, word5, word6);
-  let finmin = '10';
-  let finsec = '10';
 
+  wordstring = word1 + word2 + word3 + word4 + word5 + word6;
+  //wordstring = word1.concat(word2,word3,word4,word5,word6);
+  //wordstring = wordstring.replace(/\,/g,"");
+  arr = new Array(word1,word2,word3,word4,word5,word6); // 단어 하나하나 
 
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   
-  
   useEffect(() => {
+   
     const countdown = setInterval(() => {
       if (parseInt(seconds) >= 0) {
           setSeconds(parseInt(seconds) + 1);
@@ -53,10 +56,6 @@ export default function Game(props) {
       }, 1000);
       return () => clearInterval(countdown);
   }, [minutes, seconds]);
-  //const endsec = useLocation(seconds);
-
-  //clearInterval(countdown)
-  console.log(inputvalue1);
 
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
@@ -147,9 +146,9 @@ export default function Game(props) {
                   <div class="like_area">
                     <div class="puz_btn">
                     <React.Fragment>
-                      <button type="button" class="btn btn-secondary" onClick={openModal}>제출하기</button>
+                      <button type="button" class="btn btn-secondary" onClick={() => {summit_total();summit(); openModal();}}>제출하기</button>
                       <Modal1 open={modalOpen} close={closeModal} header="제출 결과">
-                        정답 맞춘 개수/ {word1} / {word2} / {word3} / {word4} / {word5} / {word6} / {arr}
+                       정말 제출하시겠습니까? (다시 도전 할 수 없습니다.)
                       </Modal1>
                     </React.Fragment>
                     </div>
@@ -165,3 +164,13 @@ export default function Game(props) {
   );
 }
 
+export function summit() { // 단어 하나하나
+   console.log(`this is each of word hoho ${arr}`);
+   return arr;
+}
+
+
+export function summit_total() { // 전체 문자열
+   console.log(`this is  one string total word hoho ${wordstring}`);
+   return wordstring;
+}

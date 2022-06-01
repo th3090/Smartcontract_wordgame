@@ -4,9 +4,14 @@ import  { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Test from './Test';
 import Web3 from 'web3';
+import { summit } from './Game';
+import { summit_total } from './Game';
 
 let wordgameAddress = '0xdA566827a767044996259EC77667c67Be9b2B498';
 let wordgameABI = [ { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x8da5cb5b" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor", "signature": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "round_index", "type": "uint256" }, { "indexed": false, "name": "participant_index", "type": "uint256" }, { "indexed": false, "name": "participant", "type": "address" }, { "indexed": false, "name": "fee", "type": "uint256" }, { "indexed": false, "name": "participationTime", "type": "uint256" } ], "name": "PARTICIPATION", "type": "event", "signature": "0x44c9d19fd0e696a4baba85d685148ad8a5607aa35f4592f6d7026b9f026146cb" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "round_index", "type": "uint256" }, { "indexed": false, "name": "participant_index", "type": "uint256" }, { "indexed": false, "name": "participant", "type": "address" }, { "indexed": false, "name": "answerCount", "type": "uint256" }, { "indexed": false, "name": "playtime", "type": "uint256" } ], "name": "SUMMIT", "type": "event", "signature": "0xcd3da99e2107a36ded1a22af815b271eba2467ba618e20d68a645cbf3c01a513" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "round_index", "type": "uint256" }, { "indexed": false, "name": "winner", "type": "address" }, { "indexed": false, "name": "pot", "type": "uint256" } ], "name": "DISTRIBUTE", "type": "event", "signature": "0x40749561de6aca84f85739f425fc79a9fc76d56a57dc6ec6253d55ecb386e7ce" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "round_index", "type": "uint256" }, { "indexed": false, "name": "sender", "type": "address" }, { "indexed": false, "name": "trueAnswerList", "type": "string[]" } ], "name": "START", "type": "event", "signature": "0x3ff541ee0b04b8f762bbcc4b3d86beb98d153624f7a9f51082a13a754678c32c" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "round_index", "type": "uint256" }, { "indexed": false, "name": "winner", "type": "address" }, { "indexed": false, "name": "pot", "type": "uint256" }, { "indexed": false, "name": "next_round", "type": "uint256" } ], "name": "END", "type": "event", "signature": "0x33c481d31f350664201ec71202a57b8cce0cd2ddc126cdb7c83d6361acace040" }, { "constant": false, "inputs": [], "name": "participation", "outputs": [ { "name": "result", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function", "signature": "0xd3240bd2" }, { "constant": true, "inputs": [], "name": "getPot", "outputs": [ { "name": "pot", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x403c9fa8" }, { "constant": true, "inputs": [ { "name": "index", "type": "uint256" } ], "name": "getParticipantInfo", "outputs": [ { "name": "participant", "type": "address" }, { "name": "participationTime", "type": "uint256" }, { "name": "summitTime", "type": "uint256" }, { "name": "playTime", "type": "uint256" }, { "name": "answerList", "type": "string[]" }, { "name": "answerCount", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0xb110c731" }, { "constant": false, "inputs": [ { "name": "summitWords", "type": "string" }, { "name": "summitAnswerList", "type": "string[]" } ], "name": "summit", "outputs": [ { "name": "result", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0xac815a5d" }, { "constant": false, "inputs": [], "name": "distribute", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0xe4fc6b6d" }, { "constant": false, "inputs": [], "name": "_popAndSearchWinner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x0322e7d0" }, { "constant": false, "inputs": [ { "name": "trueAnswerWords", "type": "string" }, { "name": "trueAnswerList", "type": "string[]" } ], "name": "startGame", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x2cc6e29a" }, { "constant": true, "inputs": [ { "name": "index", "type": "uint256" } ], "name": "getGameInfo", "outputs": [ { "name": "gameRound", "type": "uint256" }, { "name": "trueAnswerList", "type": "string[]" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x47e1d550" } ]
+
+var wordstring; // 단어 하나하나 배열
+let totalword; //단어 하나로 묶은거
 
 class Main extends Component {
 
@@ -67,6 +72,17 @@ class Main extends Component {
 
   initWeb3 = async () => {
     if (window.ethereum) {
+      wordstring = summit();
+      totalword = summit_total();
+      console.log(`this is wordstring ${wordstring}`);
+      console.log(`this is totalword ${totalword}`);
+
+      if (this.word !== totalword) { // 게임 진행했을 때 
+        console.log(`this is differentttttttttttttttttttttttt    ${totalword}`);
+      }
+      else{ // 게임 진행 안했을 때 
+        console.log(`this is sameeeeeeeeeeeeeeeeeeeeeeeeeeeee   ${totalword}`);
+      }
       console.log('Recent mode')
       this.web3 = new Web3(window.ethereum);
       try {
@@ -107,8 +123,8 @@ class Main extends Component {
 
   gameStart = async() => {
     let nonce = await this.web3.eth.getTransactionCount(this.account);
-    let answerWordList = await ["사과","과일","일정","정상수"];
-    let answerWords = await "사과과일일정정상수";
+    let answerWordList = await ["임산부","잉꼬부부","잉크병","부금","핑크","병세"];
+    let answerWords = await "임산부잉꼬부부잉크병부금핑크병세";
     this.wordgameContract.methods.startGame(answerWords, answerWordList).send({from:this.account, value:0, gas:300000, nonce:nonce})
     // let gameInfo = await this.wordgameContract.methods.getGameInfo(1).call()
     // console.log(gameInfo);
@@ -136,9 +152,9 @@ class Main extends Component {
   }
 
   summit = async() => {
-    let summitWordList = await ["사과","과일","일정","정상수"];
-    let summitWords = await "사과과일일정정상수";
-    this.wordgameContract.methods.summit(summitWords, summitWordList).send({from:this.account, value:0, gas:300000})
+    let summitWordList = await wordstring;
+    let summitWords = await totalword;
+    this.wordgameContract.methods.summit(summitWords, summitWordList).send({from:this.account, value:0, gas:3000000})
   }
 
   distribute = async => {
@@ -297,17 +313,17 @@ class Main extends Component {
           </div>
         </div>
   
-      {/* <div className='container'>
+      <div className='container'>
         <ul> <Link to=
         {{  pathname : "/game",
           }}>
         <button className='btn btn-danger btn-lg' onClick={this.participation}>Join!</button>
         </Link></ul>
-      </div> */}
-
+      </div>
+{/* 
       <div className='container'>
         <button className='btn btn-danger btn-lg' onClick={this.participation}>Join!</button>
-      </div>
+      </div> */}
 
       <div className='container'>
         <button className='btn btn-danger btn-lg' onClick={this.gameStart}>Start!</button>
