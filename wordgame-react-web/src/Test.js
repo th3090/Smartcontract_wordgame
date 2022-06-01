@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 import 'moment/locale/ko';
 import { Link,useNavigate,Navigate } from 'react-router-dom'; 
 import { useInterval } from 'react-use';
-import {Routes, Route} from 'react-router-dom'; 
+import {Routes, Route} from 'react-router-dom';
 
 
 const Test = () => {
@@ -18,7 +18,7 @@ const Test = () => {
     setSeconds(Date.now());
   }, 1000 );
 
-  const startTime = new Date('2022-05-30T22:00'),
+  const startTime = new Date('2022-06-01T22:00'),
         nowTimeFormat = new Date(seconds);
 
   return (

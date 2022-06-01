@@ -27,7 +27,7 @@ const Test2 = () => {
     setSeconds(Date.now());
   }, 1000);
 
-  const startTime = new Date('2022-05-30T20:52'),
+  const startTime = new Date('2022-06-01T20:52'),
         nowTimeFormat = new Date(seconds);
 
 

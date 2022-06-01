@@ -24,8 +24,8 @@ contract Wordgame {
 
     bool private _gameStatusFlag; // 게임 on/off를 담당할 플래그
 
-    uint256 private _gameTail = 1; // GameStatusInfo 저장을 위한 queue의 tail
-    uint256 private _gameHead = 1; // GameStautsINfo 저장을 위한 queue의 head
+    uint256 private _gameTail; // GameStatusInfo 저장을 위한 queue의 tail
+    uint256 private _gameHead; // GameStautsINfo 저장을 위한 queue의 head
 
     /*  참가자 정보를 저장할 큐 관련 변수 */
     uint256 private _tail; // ParticipantInfo 저장을 위한 queue의 tail
@@ -59,6 +59,10 @@ contract Wordgame {
     function participation() public payable returns (bool result) {
         // Check the proper ether is sent
         require(msg.value == PARTICIPATION_FEE_AMOUNT, "Not enough ETH");
+        
+        require(_gameStatusFlag == true, "There are no games in progress");
+        // require(_searchParticipationIndex(), "Already paricipated");
+
 
         // Push bet to the queue
         require(pushParticipantInfo(), "Fail to add a new Participant Info");
@@ -71,6 +75,17 @@ contract Wordgame {
         emit PARTICIPATION(round_index, _tail-1, msg.sender, msg.value, now);
 
         return true;
+    }
+
+    function _searchParticipationIndex() private view returns (bool) {
+    for (uint i = _head; i <_tail; i++) {
+        if (_participants[i].participant == msg.sender) {
+            return false;
+        }
+        else {
+            return true;
+        }
+        }
     }
 
     // save the participant to the queue
@@ -202,7 +217,7 @@ contract Wordgame {
 
     // distribute function -> 1등에게 쌓인 pot money 전달
     function distribute() public {
-        require(msg.sender == owner);
+        // require(msg.sender == admin);
         // 1등 찾기
         address payable winner = _popAndSearchWinner();
         uint256 index = _gameTail;
@@ -219,6 +234,7 @@ contract Wordgame {
 
         emit END(index, winner, _pot, index+1);
     }
+
 
     function _popBet(uint256 index) internal returns (bool) {
         delete _participants[index];
@@ -248,7 +264,7 @@ contract Wordgame {
 
     function _pushAnswerInfo(string memory trueAnswerWords, string[] memory trueAnswerList) private returns (bool) {
         GameStatusInfo memory g;
-        g.gameRound == _gameTail;
+        g.gameRound = _gameTail;
         g.answerWords = trueAnswerWords;
         g.answerList = trueAnswerList;
 
@@ -258,7 +274,7 @@ contract Wordgame {
     }
 
     function startGame(string memory trueAnswerWords, string[] memory trueAnswerList) public returns (bool) {
-        require(msg.sender == owner);
+        // require(msg.sender == admin, 'Not admin address');
 
         require(_pushAnswerInfo(trueAnswerWords, trueAnswerList), 'Fail to add new game Info');
 
