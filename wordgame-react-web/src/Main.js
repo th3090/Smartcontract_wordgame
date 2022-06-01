@@ -103,7 +103,6 @@ class Main extends Component {
 
     let owner = await this.wordgameContract.methods.owner().call()
     console.log(`owner : ${owner}`)
-
   }
 
   gameStart = async() => {
@@ -143,7 +142,7 @@ class Main extends Component {
   }
 
   distribute = async => {
-    this.wordgameContract.methods.distribute().send({from:this.account, value:0, gas:300000})
+    this.wordgameContract.methods.distribute().send({from:this.account, value:0, gas:3000000})
   }
 
   // 참가 인원 전체 정보 받아오기
@@ -195,8 +194,26 @@ class Main extends Component {
       record.round_index = parseInt(events[i].returnValues.round_index, 10).toString();
       record.participant_index = parseInt(events[i].returnValues.participant_index, 10).toString();
       record.participant = events[i].returnValues.participant;
-      record.answerCount = events[i].answerCount;
-      record.playtime = events[i].playtime;
+      record.answerCount = events[i].returnValues.answerCount;
+      record.playtime = events[i].returnValues.playtime;
+      if (events[i].returnValues.round_index < this.state.distributeRecords.length) {
+        // console.log(`this is in the if  ${i}`)
+        for (let j =0; j<this.state.distributeRecords.length; j+=1) {
+          // console.log(`this is in the for  ${i} ${j}`)
+          if (this.state.distributeRecords[j].round_index == record.round_index && this.state.distributeRecords[j].winner == record.participant) {
+            // console.log(`this is winner ${this.state.distributeRecords[j].winner}`);
+            // console.log(`this is participant ${record.participant}`);
+            record.status = "1st"
+            break;
+          }
+          else{
+            record.status = "Loser"
+          }
+        }
+      }
+      else {
+        record.status = "-"
+      };
       records.unshift(record);
     }
     // console.log(records);
@@ -204,19 +221,47 @@ class Main extends Component {
     // console.log(this.state.summitRecords)
   }
 
+  // for(let j =0; j<this.state.distributeRecords.length; j+=1)
+  // if (this.state.distributeRecords[j].round_index == events[i].returnValues.round_index && this.state.distributeRecords[j].winner == events[i].returnValues.participant) {
+  //   record.state = "1st"
+  // }
+  // elif () { events[i].returnValues.round_index > this.state.distributeRecords.length
+    
+  // }
+  // else{
+  //   record.state = "Loser"
+  // }
+  //
+  // if (events[i].returnValues.round_index < this.state.distributeRecords.length) {
+  //   for (let j =0; j<this.state.distributeRecords.length; j+=1) {
+  //     if (this.state.distributeRecords[j].round_index == events[i].returnValues.round_index && this.state.distributeRecords[j].winner == events[i].returnValues.participant) {
+  //       record.status = "1st"
+  //     }
+  //     else{
+  //       record.status = "Loser"
+  //     }
+  //   }
+  // }
+  // else {
+  //   record.status = "-"
+  // }
+
   getDistributeEvents = async() => {
     const records = [];
     let events = await this.wordgameContract.getPastEvents('DISTRIBUTE', {fromBlock:0,toBlock:'latest'});
-    for(let i =0; i<events.lenth;i+1){
+    // console.log(events);
+    for(let i =0; i<events.length;i+=1){
       const record = {}
-      record.round_index = parseInt(events[i].returnValues.index, 10).toString();
+      record.round_index = events[i].returnValues.round_index;
       record.winner = events[i].returnValues.winner;
-      record._pot = events[i].returnValues._pot;
+      record._pot = events[i].returnValues.pot;
       records.unshift(record);
     }
     this.setState({distributeRecords:records})
-    // console.log(this.state.distributeRecords)
+    // console.log(this.state.distributeRecords[1].round_index)
+    // console.log(this.state.distributeRecords[1].winner)
   }
+  
 
 
 
@@ -292,7 +337,7 @@ class Main extends Component {
               </thead>
               <tbody>
                 {
-                  this.state.testRecords.map((record, index) => {
+                  this.state.summitRecords.map((record, index) => {
                     return(
                       <tr key={index}>
                         <td>{record.round_index}</td>
@@ -300,7 +345,7 @@ class Main extends Component {
                         <td>{record.participant}</td>
                         <td>{record.answerCount}</td>
                         <td>{record.playtime}</td>
-                        <td>0</td>
+                        <td>{record.status}</td>
                       </tr>   
                     )
                   })
