@@ -10,7 +10,7 @@ let wordstring;
 var arr;
 
 export var check_submit = false;
-console.log(`this is game page check_submit ${check_submit}`)
+// console.log(`this is game page check_submit ${check_submit}`)
 
 export default function Game(props) {
 
@@ -168,19 +168,19 @@ export default function Game(props) {
 }
 
 export function summitword() { // 단어 하나하나
-   console.log(`this is each of word hoho ${arr}`);
+  //  console.log(`this is each of word hoho ${arr}`);
    return arr;
 }
 
 
 export function summit_total() { // 전체 문자열
-   console.log(`this is  one string total word hoho ${wordstring}`);
+  //  console.log(`this is  one string total word hoho ${wordstring}`);
    return wordstring;
 }
 
 export function changevalue(){
-  console.log(`게임 페이지에서 changevalue 잘 실행됨 현재 판단닶 ${check_submit}`)
+  // console.log(`게임 페이지에서 changevalue 잘 실행됨 현재 판단닶 ${check_submit}`)
   check_submit = true;
-  console.log(`게임 페이지에서 true로 바꿈. 잘 실행됨 현재 판단닶 ${check_submit}`)
+  // console.log(`게임 페이지에서 true로 바꿈. 잘 실행됨 현재 판단닶 ${check_submit}`)
 
 }

@@ -217,7 +217,9 @@ contract Wordgame {
 
     // distribute function -> 1등에게 쌓인 pot money 전달
     function distribute() public {
-        // require(msg.sender == admin);
+        require(msg.sender == owner, "It is not owner address");
+        require(_gameStatusFlag == true, "There is no existing game");
+
         // 1등 찾기
         address payable winner = _popAndSearchWinner();
         uint256 index = _gameTail;
@@ -274,7 +276,8 @@ contract Wordgame {
     }
 
     function startGame(string memory trueAnswerWords, string[] memory trueAnswerList) public returns (bool) {
-        // require(msg.sender == admin, 'Not admin address');
+        require(msg.sender == owner, 'It is not owner address');
+        require(_gameStatusFlag == false, 'Already game start');
 
         require(_pushAnswerInfo(trueAnswerWords, trueAnswerList), 'Fail to add new game Info');
 
