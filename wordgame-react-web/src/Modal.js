@@ -1,6 +1,7 @@
 import React from 'react';
 import "./App.css";
 import { Link } from 'react-router-dom'; 
+import {changevalue} from './Game';
 
 const Modal = (props) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -19,7 +20,7 @@ const Modal = (props) => {
           <main>{props.children}</main>
           <footer>
             <ul><Link to="/">
-            <button className="close" onClick={close}>
+            <button className="close"  onClick={() => {changevalue(); close();}}>
               확인
             </button>
             </Link></ul>

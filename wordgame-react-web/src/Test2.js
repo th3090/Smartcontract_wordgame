@@ -7,7 +7,6 @@ import { useInterval } from 'react-use';
 import {Routes, Route} from 'react-router-dom'; 
 import Modal1 from './Modal';
 
-
 const Test2 = () => {
   const [seconds, setSeconds] = useState(Date.now());
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ const Test2 = () => {
     setSeconds(Date.now());
   }, 1000);
 
-  const startTime = new Date('2022-06-01T20:52'),
+  const startTime = new Date('2022-06-01T20:59'),
         nowTimeFormat = new Date(seconds);
 
 
@@ -42,7 +41,7 @@ const Test2 = () => {
                 openModal();
             </script>
         <Modal1 open={openModal} close={closeModal} header="제출 결과">
-            정답 맞춘 개수
+            게임 시간 마감으로 게임이 종료되었습니다.
             </Modal1>
         </React.Fragment>
       </div>)

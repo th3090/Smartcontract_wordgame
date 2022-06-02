@@ -53,6 +53,23 @@
 	font-size:15px
 }
 
+.adbutton{
+  margin-top: 5px;
+  margin-left: 2px;
+  padding-right: 5px;
+  position: absolute;
+  top: 8px;
+  left: 30px;
+}
+.adbutton2{
+  margin-top: 5px;
+  margin-left: 2px;
+  padding-right: 5px;
+  position: absolute;
+  top: 8px;
+  left: 120px;
+}
+
 .modal {
   display: none;
   position: fixed;

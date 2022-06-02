@@ -9,6 +9,9 @@ import Web3 from 'web3';
 let wordstring; 
 var arr;
 
+export var check_submit = false;
+console.log(`this is game page check_submit ${check_submit}`)
+
 export default function Game(props) {
 
   let [inputvalue1,setInputValue1] = useState("");
@@ -146,7 +149,7 @@ export default function Game(props) {
                   <div class="like_area">
                     <div class="puz_btn">
                     <React.Fragment>
-                      <button type="button" class="btn btn-secondary" onClick={() => {summit_total();summit(); openModal();}}>제출하기</button>
+                      <button type="button" class="btn btn-secondary" onClick={() => {summit_total();summitword();openModal();}}>제출하기</button>
                       <Modal1 open={modalOpen} close={closeModal} header="제출 결과">
                        정말 제출하시겠습니까? (다시 도전 할 수 없습니다.)
                       </Modal1>
@@ -164,7 +167,7 @@ export default function Game(props) {
   );
 }
 
-export function summit() { // 단어 하나하나
+export function summitword() { // 단어 하나하나
    console.log(`this is each of word hoho ${arr}`);
    return arr;
 }
@@ -173,4 +176,11 @@ export function summit() { // 단어 하나하나
 export function summit_total() { // 전체 문자열
    console.log(`this is  one string total word hoho ${wordstring}`);
    return wordstring;
+}
+
+export function changevalue(){
+  console.log(`게임 페이지에서 changevalue 잘 실행됨 현재 판단닶 ${check_submit}`)
+  check_submit = true;
+  console.log(`게임 페이지에서 true로 바꿈. 잘 실행됨 현재 판단닶 ${check_submit}`)
+
 }
